@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styles from './HeaderCartButton.module.scss';
 import CartIcon from '../Cart/CartIcon';
-import CartContext from '../../store/Cart-context';
+import CartContext from '../../store/cart-context';
 
 const HeaderCartButton = ({ onShow }) => {
   const { button, icon, badge } = styles;

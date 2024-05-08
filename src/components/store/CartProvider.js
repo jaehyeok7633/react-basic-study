@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import CartContext from './Cart-context';
+import CartContext from './cart-context';
 
 const defaultState = {
   items: [],
@@ -12,13 +12,34 @@ const defaultState = {
 const cartReducer = (state, action) => {
   // 상태 변화의 타입이 ADD 라면
   if (action.type === 'ADD') {
-    // 기존 상태가 가지고 있는 장바구니 항목에 새로운 항목을 추가.
-    const updatedItem = [...state.items, action.item];
-    console.log(updatedItem);
+    // 신규 아이템 받기
+    const newCartItem = action.item;
+    // 기존 장바구니에 등록된 메뉴인지 아닌지에 따라 처리를 다르게 해야 할 것 같아요.
+    // findIndex: 콜백을 통해 배열을 순회하면서 지정한 조건에 맞는 요소의 인덱스를 반환.
+    const index = state.items.findIndex(
+      // 기존 상태 배열의 id를 하나씩 얻어서 현재 추가하고자 하는 상품의 id와 같은 요소의 인덱스 반환.
+      (item) => item.id === newCartItem.id,
+    );
+
+    // 기존 카트 아이템
+    const existingItem = [...state.items]; // 기존 배열을 복사.
+    const prevCartItem = existingItem[index]; // 위에서 찾은 인덱스로 요소를 하나만 지목
+
+    let updatedItem;
+
+    if (index === -1) {
+      // 신규 아이템
+      updatedItem = [...state.items, newCartItem];
+    } else {
+      // 이미 추가가 됐던 아이템 -> 수량을 1 올려주면 되겠구나. (모달 안에서만 유효)
+      // prevCartItem.amount++; (x) -> 바깥 화면에서는 상품이 꼭 하나씩만 올라가는 것은 아님!
+      prevCartItem.amount += newCartItem.amount;
+      updatedItem = [...existingItem]; // 새롭게 복사 배열을 갱신.
+    }
 
     const updatedPrice =
       state.totalPrice +
-      action.item.price * action.item.amount;
+      newCartItem.price * newCartItem.amount;
 
     // 변경된 상태를 객체 형태로 리턴 -> cartState로 전달됨.
     return {
@@ -26,7 +47,7 @@ const cartReducer = (state, action) => {
       totalPrice: updatedPrice,
     };
   } else if (action.type === 'REMOVE') {
-    // 지우려고 하는 항목의 id와 일치하지 않는 항목들만 따로 배열로 받아서 리턴. (Filter)
+    // 지우려고 하는 항목의 id와 일치하지 않는 항목들만 따로 배열로 받아서 리턴. (filter)
     const removedItem = state.items.filter(
       (item) => item.id !== action.id,
     );

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styles from './Cart.module.scss';
 import CartModal from '../../UI/Modal/CartModal';
-import CartContext from '../../store/Cart-context';
+import CartContext from '../../store/cart-context';
 import CartItem from './CartItem';
 
 const DUMMY_CART = [

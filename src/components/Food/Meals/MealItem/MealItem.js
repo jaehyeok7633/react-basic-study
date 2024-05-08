@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styles from './MealItem.module.scss';
 import MealItemForm from './MealItemForm';
-import CartContext from '../../../store/Cart-context';
+import CartContext from '../../../store/cart-context';
 
 const MealItem = ({ id, price, description, name }) => {
   // context에서 필요한 데이터 or 함수를 소비하기 위해 꺼내기.
@@ -25,7 +25,7 @@ const MealItem = ({ id, price, description, name }) => {
     price: priceStyle,
   } = styles;
 
-  const formatPrice = new Intl.NumberFormat('ko-Kr').format(
+  const formatPrice = new Intl.NumberFormat('ko-KR').format(
     price,
   );
 
